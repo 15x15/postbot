@@ -1,0 +1,5 @@
+require 'rubygems'
+require 'irbtools'
+require 'pry'
+require_relative 'lib/dbtools'
+require_relative 'lib/scraper'
