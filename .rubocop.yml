@@ -3,3 +3,6 @@ Style/Documentation:
 
 Metrics/MethodLength:
   Max: 16
+
+Lint/UselessAssignment:
+  Enabled: false
