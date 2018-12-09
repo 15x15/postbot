@@ -1,6 +1,6 @@
 require 'twitter'
-require './config/figaro'
-require './lib/images'
+require_relative '../config/secrets'
+require_relative '../lib/images'
 
 class TwitterService
   class << self

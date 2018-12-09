@@ -1,3 +1,5 @@
 *.sqlite3
-/config/secrets.yml
+/config/secrets.rb
 /files/*
+/log/*
+cron_log.log

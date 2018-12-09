@@ -6,7 +6,7 @@ module Tools
       attr_reader :db
 
       def create_db
-        db = SQLite3::Database.new('db/scraper.sqlite3')
+        db = SQLite3::Database.new db_path
         db.execute <<-SQL
           CREATE TABLE lyrics(
             id integer primary key,
@@ -65,7 +65,13 @@ module Tools
       end
 
       def open_db
-        @db = SQLite3::Database.open('db/scraper.sqlite3')
+        @db = SQLite3::Database.open db_path
+      end
+
+      def db_path
+        root_path = File.realpath(__dir__)
+        root_path.slice! 'lib'
+        current_path ||= root_path + '/db/scraper.sqlite3'
       end
     end
   end

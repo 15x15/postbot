@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'irbtools'
 require 'pry'
 require_relative 'lib/db'
 require_relative 'lib/scraper'
@@ -9,7 +8,7 @@ class Program
   attr_reader :options
 
   def self.run
-    update_database if Tools::Db.unpublished.empty?
+    new.update_database if Tools::Db.unpublished.empty?
     new.send_tweet
   end
 
