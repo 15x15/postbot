@@ -30,3 +30,5 @@ class Program
     end
   end
 end
+
+Program.run
