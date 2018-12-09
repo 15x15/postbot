@@ -8,6 +8,11 @@ require_relative 'lib/twitter_service'
 class Program
   attr_reader :options
 
+  def self.run
+    update_database if Tools::Db.unpublished.empty?
+    new.send_tweet
+  end
+
   def initialize(options = {})
     @options = options
   end
@@ -17,8 +22,11 @@ class Program
     TwitterService.send_message data
   end
 
-  def update_database
-    data = Scraper.parse
-    Tools::Db.create data
+  def update_database(n = 10)
+    n.times do
+      data = Scraper.parse
+      Tools::Db.create data
+      sleep 2
+    end
   end
 end

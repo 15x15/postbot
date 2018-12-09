@@ -6,3 +6,12 @@ Metrics/MethodLength:
 
 Lint/UselessAssignment:
   Enabled: false
+
+Metrics/LineLength:
+  Max: 85
+
+Naming/UncommunicativeMethodParamName:
+  MinNameLength: 1
+
+Security/Open:
+  Enabled: false

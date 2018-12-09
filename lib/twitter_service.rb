@@ -1,5 +1,6 @@
 require 'twitter'
 require './config/figaro'
+require './lib/images'
 
 class TwitterService
   class << self
@@ -13,9 +14,14 @@ class TwitterService
     end
 
     def send_message(data)
-      client.update(data['title'])
+      if data['image']
+        file = Tools::Images.temp_file data['image']
+        client.update_with_media(data['body'][0...280], open(file))
+        File.delete file
+      else
+        client.update(data['body'])
+      end
       Tools::Db.update(data['id'], 1)
-      #client.update_with_media(data['title'], open(data['image']))
     end
   end
 end
