@@ -18,6 +18,9 @@ class App
   def send_tweet
     record = Lyric.find(published: false)
     TwitterService.send_message record
+  rescue
+    record.update(published: true)
+    retry
   end
 
   def update_database(n = 10)
