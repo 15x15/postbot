@@ -13,15 +13,15 @@ class TwitterService
       end
     end
 
-    def send_message(data)
-      if data['image']
-        file = Tools::Images.temp_file data['image']
-        client.update_with_media(data['body'][0...280], open(file))
+    def send_message(record)
+      if record.image
+        file = Tools::Images.temp_file record.image
+        client.update_with_media(record.body[0...280], open(file))
         File.delete file
       else
-        client.update(data['body'])
+        client.update(record.body)
       end
-      Tools::Db.update(data['id'], 1)
+      record.update(published: true)
     end
   end
 end
