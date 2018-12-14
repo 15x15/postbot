@@ -1,6 +1,6 @@
 require 'mechanize'
 
-class Scraper
+class ScraperService
   URL = 'https://www.lyrics.com/lyric/random'.freeze
 
   def self.parse

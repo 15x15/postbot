@@ -25,7 +25,7 @@ class App
 
   def update_database(n = 10)
     n.times do
-      data = Scraper.parse
+      data = ScraperService.parse
       Lyric.create(
         title: data[:title],
         body: data[:body],
@@ -47,7 +47,6 @@ DB = Sequel.connect(
 )
 Sequel.extension :migration
 
-Dir[File.join(App.root, 'lib', '*.rb')].each { |file| require file }
 Dir[File.join(App.root, 'app', '**', '*.rb')].each { |file| require file }
 
 Sequel::Migrator.run(DB, File.join(App.root, 'db', 'migrations')) if DB

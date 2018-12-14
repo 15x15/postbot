@@ -1,6 +1,6 @@
 require 'twitter'
-require_relative '../config/secrets'
-require_relative '../lib/images'
+require_relative '../../config/secrets'
+require_relative '../services/images_service'
 
 class TwitterService
   class << self
@@ -15,7 +15,7 @@ class TwitterService
 
     def send_message(record)
       if record.image
-        file = Tools::Images.temp_file record.image
+        file = ImagesService.temp_file record.image
         client.update_with_media(record.body[0...280], open(file))
         File.delete file
       else
