@@ -14,12 +14,12 @@ class TwitterService
     end
 
     def send_message(record)
-      case record.class
-      when Lyric
+      case record.class.to_s
+      when 'Lyric'
         file = ImagesService.temp_file record.image
         client.update_with_media(record.body[0...280], open(file))
         File.delete file
-      when Quote
+      when 'Quote'
         client.update(record.text + record.author)
       end
       record.update(published: true)
