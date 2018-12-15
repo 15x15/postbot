@@ -5,7 +5,7 @@ class CreateTableLyrics < Sequel::Migration
       String :title
       String :body
       String :image
-      Boolean :published
+      Boolean :published, default: false
       index :id
     end
   end

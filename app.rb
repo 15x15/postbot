@@ -4,35 +4,32 @@ require 'sqlite3'
 require 'sequel'
 
 class App
-  attr_reader :options
+  attr_reader :steep, :provider, :model
 
-  def initialize(options = {})
-    @options = options
+  def initialize(options: {})
+    @steep = options[:steep] || 10
+    @provider = options[:provider] || 'lyric'
+    @model = Kernel.const_get(provider.capitalize)
   end
 
   def call
     update_database if Lyric.find(published: false).nil?
-    send_tweet
+    post_message
   end
 
-  def send_tweet
-    record = Lyric.find(published: false)
+  def post_message
+    record = model.find(published: false)
     TwitterService.send_message record
-  rescue
+  rescue StandardError
     record.update(published: true)
     retry
   end
 
-  def update_database(n = 10)
-    n.times do
-      data = ScraperService.parse
-      Lyric.create(
-        title: data[:title],
-        body: data[:body],
-        image: data[:image],
-        published: false
-      )
-      sleep 2
+  def update_database
+    steep.times do
+      data = ScraperService.parse(provider)
+      model.create(data)
+      sleep 1
     end
   end
 
@@ -50,6 +47,3 @@ Sequel.extension :migration
 Dir[File.join(App.root, 'app', '**', '*.rb')].each { |file| require file }
 
 Sequel::Migrator.run(DB, File.join(App.root, 'db', 'migrations')) if DB
-
-app = App.new
-app.call
