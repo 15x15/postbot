@@ -4,16 +4,15 @@ require 'sqlite3'
 require 'sequel'
 
 class App
-  attr_reader :steep, :provider, :model
+  attr_reader :provider, :model
 
   def initialize(options: {})
-    @steep = options[:steep] || 10
-    @provider = options[:provider] || 'lyric'
+    @provider = options[:provider] || 'quote'
     @model = Kernel.const_get(provider.capitalize)
   end
 
   def call
-    update_database if Lyric.find(published: false).nil?
+    ScraperService.parse(provider) if model.find(published: false).nil?
     post_message
   end
 
@@ -23,14 +22,6 @@ class App
   rescue StandardError
     record.update(published: true)
     retry
-  end
-
-  def update_database
-    steep.times do
-      data = ScraperService.parse(provider)
-      model.create(data)
-      sleep 1
-    end
   end
 
   def self.root
